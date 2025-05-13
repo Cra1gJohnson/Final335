@@ -1,0 +1,26 @@
+<% title = 'Recipe Finder' %>
+
+<div class="container">
+  <h1>Search Recipes by Ingredients</h1>
+  <form action="/search" method="post">
+    <input type="text" name="ingredients" placeholder="e.g. chicken, rice" required>
+    <button type="submit">Find</button>
+  </form>
+
+  <% if (recipes) { %>
+    <ul class="recipes">
+      <% recipes.forEach(r => { %>
+        <li>
+          <img src="<%= r.strMealThumb %>" alt="<%= r.strMeal %>">
+          <h3><%= r.strMeal %></h3>
+          <form action="/favorites" method="post">
+            <input type="hidden" name="id" value="<%= r.idMeal %>">
+            <input type="hidden" name="title" value="<%= r.strMeal %>">
+            <input type="hidden" name="image" value="<%= r.strMealThumb %>">
+            <button type="submit">♥ Favorite</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>

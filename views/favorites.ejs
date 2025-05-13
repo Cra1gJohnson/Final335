@@ -1,0 +1,13 @@
+<% layout('layouts/main', { title: 'My Favorites' }) %>
+
+<div class="container">
+  <h1>My Favorite Recipes</h1>
+  <ul class="recipes">
+    <% favorites.forEach(f => { %>
+      <li>
+        <img src="<%= f.image %>" alt="<%= f.title %>">
+        <h3><%= f.title %></h3>
+      </li>
+    <% }) %>
+  </ul>
+</div>
