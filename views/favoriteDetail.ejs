@@ -1,0 +1,21 @@
+<div class="container">
+  <h1><%= meal.strMeal %></h1>
+  <img src="<%= meal.strMealThumb %>" alt="<%= meal.strMeal %>" style="max-width:300px;">
+  <h2>Category: <%= meal.strCategory %></h2>
+  <h3>Area: <%= meal.strArea %></h3>
+  <p><strong>Instructions:</strong></p>
+  <p><%= meal.strInstructions %></p>
+  <h4>Ingredients:</h4>
+  <ul>
+    <% for(let i=1; i<=20; i++) { 
+         const ingredient = meal['strIngredient' + i];
+         const measure = meal['strMeasure' + i];
+         if(ingredient && ingredient.trim()) { %>
+      <li><%= ingredient %> - <%= measure %></li>
+    <% } } %>
+  </ul>
+  <% if (meal.strYoutube) { %>
+    <p><a href="<%= meal.strYoutube %>" target="_blank">Watch on YouTube</a></p>
+  <% } %>
+  <a href="/favorites">Back to Favorites</a>
+</div>
