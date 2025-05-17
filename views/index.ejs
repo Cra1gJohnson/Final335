@@ -1,11 +1,13 @@
 <% title = 'Recipe Finder' %>
 
 <div class="container">
-  <h1>Search Recipes by Ingredients</h1>
+  <h1>Search Recipes by an Ingredient</h1>
   <form action="/search" method="post">
     <input type="text" name="ingredients" placeholder="e.g. chicken, rice" required>
     <button type="submit">Find</button>
   </form>
+
+  <a href="/favorites" class="button">Favorites</a>
 
   <% if (recipes) { %>
     <ul class="recipes">

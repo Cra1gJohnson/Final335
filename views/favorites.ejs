@@ -1,12 +1,16 @@
-<% layout('layouts/main', { title: 'My Favorites' }) %>
-
 <div class="container">
+  <a href="/" class="button">Home</a>
   <h1>My Favorite Recipes</h1>
   <ul class="recipes">
     <% favorites.forEach(f => { %>
       <li>
-        <img src="<%= f.image %>" alt="<%= f.title %>">
-        <h3><%= f.title %></h3>
+        <a href="/favorites/<%= f._id %>">
+          <img src="<%= f.image %>" alt="<%= f.title %>">
+          <h3><%= f.title %></h3>
+        </a>
+        <form action="/favorites/<%= f._id %>/remove" method="POST" style="display:inline;">
+          <button type="submit" onclick="return confirm('Remove this favorite?')">Remove</button>
+        </form>
       </li>
     <% }) %>
   </ul>
