@@ -1,5 +1,8 @@
 <div class="container">
   <a href="/" class="button">Home</a>
+  <form action="/favoritesRemoval" method="GET">
+    <button class="button" type="submit" onclick="return confirm('Remove All Favorites?')">Remove All Favorites</button>
+  </form>
   <h1>My Favorite Recipes</h1>
   <ul class="recipes">
     <% favorites.forEach(f => { %>

@@ -15,7 +15,23 @@ router.post('/search', async (req, res) => {
 
   const response = await axios.get(url);
   const recipes = response.data.meals || [];
-  res.render('index', { recipes });
+  res.render('index', {recipes});
+
+});
+
+router.get('/search/:id', async(req, res) => {
+  const mongoId = req.params.id;
+  try {
+    const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mongoId}`);
+    const meal = response.data.meals ? response.data.meals[0] : null;
+    console.log(!meal);
+    if (!meal) {
+      return res.status(404).send('Recipe not found');
+    }
+    res.render('recipeDetail', {title: meal.strMeal, meal});
+  } catch (err) {
+    res.status(500).send('Error fetching recipe details');
+  }
 });
 
 router.get('/favorites', async (req, res) => {
@@ -24,9 +40,14 @@ router.get('/favorites', async (req, res) => {
 });
 
 router.post('/favorites', async (req, res) => {
-  const { id, title, image } = req.body;
-  await Favorite.create({ recipeId: id, title, image });
-  res.redirect('/favorites');
+  try {
+    const {id, title, image} = req.body
+    await Favorite.create({ recipeId: id, title, image });
+    res.status(200).json({success: true})
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ success: false, message: 'DB error' });
+  }
 });
 
 router.get('/favorites/:id', async (req, res) => {
@@ -51,6 +72,11 @@ router.get('/favorites/:id', async (req, res) => {
 
 router.post('/favorites/:id/remove', async (req, res) => {
   await Favorite.findByIdAndDelete(req.params.id);
+  res.redirect('/favorites');
+});
+
+router.get('/favoritesRemoval', async (req, res) => {
+  await Favorite.deleteMany({});
   res.redirect('/favorites');
 });
 

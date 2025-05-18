@@ -1,0 +1,61 @@
+<div class="container">
+  <h1><%= meal.strMeal %></h1>
+  <img src="<%= meal.strMealThumb %>" alt="<%= meal.strMeal %>" style="max-width:300px;">
+  <h2>Category: <%= meal.strCategory %></h2>
+  <h3>Area: <%= meal.strArea %></h3>
+  <p><strong>Instructions:</strong></p>
+  <p><%= meal.strInstructions %></p>
+  <h4>Ingredients:</h4>
+  <ul>
+    <% for(let i=1; i<=20; i++) { 
+         const ingredient = meal['strIngredient' + i];
+         const measure = meal['strMeasure' + i];
+         if(ingredient && ingredient.trim()) { %>
+      <li><%= ingredient %> - <%= measure %></li>
+    <% } } %>
+  </ul>
+  <% if (meal.strYoutube) { %>
+    <p><a href="<%= meal.strYoutube %>" target="_blank">Watch on YouTube</a></p>
+  <% } %>
+  <form class="favorite-form">
+    <input type="hidden" name="id" value="<%= meal.idMeal %>">
+    <input type="hidden" name="title" value="<%= meal.strMeal %>">
+    <input type="hidden" name="image" value="<%= meal.strMealThumb %>">
+    <button type="submit">♥ Favorite</button>
+  </form>
+  <hr>
+  <a href="/">Back to Home</a>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.favorite-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Stop full-page reload
+
+      if (!confirm("Add this recipe to favorites?")) return;
+
+      const formData = new FormData(form);
+      const body = Object.fromEntries(formData.entries());
+      console.log(body);
+      try {
+        const res = await fetch('/favorites', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          alert('Recipe added!');
+        } else {
+          alert('Failed to add recipe.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error adding recipe.');
+      }
+    });
+  });
+});
+</script>

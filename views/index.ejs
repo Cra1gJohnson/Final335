@@ -9,13 +9,16 @@
 
   <a href="/favorites" class="button">Favorites</a>
 
-  <% if (recipes) { %>
+  <% if (recipes != 0 && recipes != null) { %>
     <ul class="recipes">
       <% recipes.forEach(r => { %>
         <li>
+          <a href="/search/<%= r.idMeal %>">
           <img src="<%= r.strMealThumb %>" alt="<%= r.strMeal %>">
           <h3><%= r.strMeal %></h3>
-          <form action="/favorites" method="post">
+          </a>
+
+          <form class="favorite-form">
             <input type="hidden" name="id" value="<%= r.idMeal %>">
             <input type="hidden" name="title" value="<%= r.strMeal %>">
             <input type="hidden" name="image" value="<%= r.strMealThumb %>">
@@ -24,5 +27,40 @@
         </li>
       <% }) %>
     </ul>
+  <% } else if(recipes) { %>
+    <h3> No Recipes Found </h3>
   <% } %>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.favorite-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Stop full-page reload
+
+      if (!confirm("Add this recipe to favorites?")) return;
+
+      const formData = new FormData(form);
+      const body = Object.fromEntries(formData.entries());
+      console.log(body);
+      try {
+        const res = await fetch('/favorites', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          alert('Recipe added!');
+        } else {
+          alert('Failed to add recipe.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error adding recipe.');
+      }
+    });
+  });
+});
+</script>
