@@ -51,13 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify(body)
         });
 
-        if (res.ok) {
-          alert('Recipe added!');
-        } else {
+        if (!res.ok) {
           alert('Failed to add recipe.');
         }
-      } catch (err) {
-        console.error(err);
+      } catch (e) {
+        console.error(e);
         alert('Error adding recipe.');
       }
     });
