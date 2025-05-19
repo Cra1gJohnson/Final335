@@ -24,7 +24,7 @@ router.get('/search/:id', async(req, res) => {
   try {
     const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mongoId}`);
     const meal = response.data.meals ? response.data.meals[0] : null;
-    console.log(!meal);
+
     if (!meal) {
       return res.status(404).send('Recipe not found');
     }
